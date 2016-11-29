@@ -14,14 +14,16 @@ SECTION = "net"
 DEPENDS = "openssl systemd"
 
 SRC_URI = " \
-           git://github.com/open-iscsi/open-isns \
+    git://github.com/open-iscsi/open-isns \
 "
 
 SRCREV ?= "09954404e948e41eb0fce8e28836018b4ce3d20d"
 
 S = "${WORKDIR}/git"
 
-inherit systemd autotools-brokensep
+inherit systemd autotools-brokensep distro_features_check
+# depends on systemd
+REQUIRED_DISTRO_FEATURES = "systemd"
 
 EXTRA_OECONF = " --prefix=${prefix} --enable-shared"
 

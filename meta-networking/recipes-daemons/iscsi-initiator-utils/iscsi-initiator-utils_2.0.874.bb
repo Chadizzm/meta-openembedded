@@ -14,20 +14,22 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"
 SRCREV ?= "8db9717e73d32d2c5131da4f9ad86dfd9065f74b"
 
 SRC_URI = "git://github.com/open-iscsi/open-iscsi \
-           file://iscsi-initiator-utils-Do-not-clean-kernel-source.patch \
-           file://iscsi-initiator-utils-fw_context-add-include-for-NI_MAXHOST-definiton.patch \
-           file://initd.debian \
-           file://99_iscsi-initiator-utils \
-           file://iscsi-initiator \
-           file://iscsi-initiator.service \
-           file://iscsi-initiator-targets.service \
-           file://set_initiatorname \
+    file://iscsi-initiator-utils-Do-not-clean-kernel-source.patch \
+    file://iscsi-initiator-utils-fw_context-add-include-for-NI_MAXHOST-definiton.patch \
+    file://initd.debian \
+    file://99_iscsi-initiator-utils \
+    file://iscsi-initiator \
+    file://iscsi-initiator.service \
+    file://iscsi-initiator-targets.service \
+    file://set_initiatorname \
 "
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-inherit update-rc.d systemd autotools
+inherit update-rc.d systemd autotools distro_features_check
+# open-isns depends on systemd
+REQUIRED_DISTRO_FEATURES = "systemd"
 
 EXTRA_OECONF = " \
     --target=${TARGET_SYS} \
@@ -37,16 +39,16 @@ EXTRA_OECONF = " \
 "
 
 EXTRA_OEMAKE = ' \
-                CC="${CC}" \
-                AR="${AR}" \
-                RANLIB="${RANLIB}" \
-                CFLAGS="${CFLAGS} ${CPPFLAGS} -D_GNU_SOURCE -I. -I../include -I../../include -I../usr -I../../usr" \
-                LDFLAGS="${LDFLAGS}" \
-                LD="${LD}" \
-                OS="${TARGET_SYS}" \
-                TARGET="${TARGET_OS}" \
-                BASE="${prefix}" \
-                MANDIR="${mandir}" \
+    CC="${CC}" \
+    AR="${AR}" \
+    RANLIB="${RANLIB}" \
+    CFLAGS="${CFLAGS} ${CPPFLAGS} -D_GNU_SOURCE -I. -I../include -I../../include -I../usr -I../../usr" \
+    LDFLAGS="${LDFLAGS}" \
+    LD="${LD}" \
+    OS="${TARGET_SYS}" \
+    TARGET="${TARGET_OS}" \
+    BASE="${prefix}" \
+    MANDIR="${mandir}" \
 '
 
 TARGET_CC_ARCH += "${LDFLAGS}"
